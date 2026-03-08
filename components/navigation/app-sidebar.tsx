@@ -1,128 +1,19 @@
 import { Sidebar, SidebarHeader } from "@/components/ui/sidebar";
-import {
-  BarChart,
-  CreditCard,
-  DashboardCircleIcon,
-  Gear,
-  Home,
-  Person,
-  Store,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon, HugeiconsIconProps } from "@hugeicons/react";
-import SidebarSection from "./sidebar-group";
+import { ROLE_PERMISSIONS } from "@/constants/roles";
+import { sidebar } from "@/constants/sidebar";
 import { getUserRole } from "@/lib/auth";
-import { ROLES } from "@/constants/roles";
-
-interface SidebarItemChild extends Omit<SidebarItem, "isActive" | "children"> {
-  url: string;
-}
-
-export interface SidebarItem {
-  title: string;
-  url?: string;
-  icon: HugeiconsIconProps["icon"] | null;
-  children: SidebarItemChild[] | null;
-  isActive: boolean;
-}
-
-const sidebar: SidebarItem[] = [
-  {
-    title: "Home",
-    icon: Home,
-    isActive: false,
-    children: null,
-    url: "/",
-  },
-  {
-    title: "Dashboard",
-    icon: DashboardCircleIcon,
-    isActive: false,
-    children: null,
-    url: "/dashboard",
-  },
-  {
-    title: "Store",
-    isActive: true,
-    icon: Store,
-    children: [
-      {
-        title: "Products",
-        url: "/store/products",
-        icon: null,
-      },
-      {
-        title: "Add Product",
-        icon: null,
-        url: "/store/add-product",
-      },
-    ],
-  },
-  {
-    title: "Analytic",
-    icon: BarChart,
-    isActive: true,
-    children: [
-      {
-        title: "Traffic",
-        url: "/analytics/traffic",
-        icon: null,
-      },
-      {
-        title: "Earning",
-        url: "/analytics/earning",
-        icon: null,
-      },
-    ],
-  },
-  {
-    isActive: true,
-    title: "Finances",
-    icon: CreditCard,
-    children: [
-      {
-        title: "Payment",
-        url: "/finances/payment",
-        icon: null,
-      },
-      {
-        title: "Payout",
-        url: "/finances/payout",
-        icon: null,
-      },
-    ],
-  },
-  {
-    title: "Account Setting",
-    isActive: true,
-    icon: Gear,
-    children: [
-      {
-        title: "My Profile",
-        url: "/account-setting/my-profile",
-        icon: null,
-      },
-      {
-        title: "Security",
-        url: "/account-setting/security",
-        icon: null,
-      },
-    ],
-  },
-  {
-    isActive: false,
-    title: "Help and Support",
-    icon: Gear,
-    url: "/help-and-support",
-    children: null,
-  },
-];
+import { Person } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { redirect } from "next/navigation";
+import SidebarSection from "./sidebar-group";
 
 const AppSidebar = async () => {
-  const isStoreManager = await getUserRole();
-  const sidebarData =
-    isStoreManager === ROLES.STORE_KEEPER
-      ? sidebar.filter((item) => item.title !== "Dashboard")
-      : sidebar;
+  const role = await getUserRole();
+  if (!role) redirect("/login");
+
+  const sidebarData = sidebar.filter((item) =>
+    ROLE_PERMISSIONS[role].includes(item.permission),
+  );
 
   return (
     <Sidebar collapsible="offcanvas" variant="inset">
