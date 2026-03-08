@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { Google_Sans, Figtree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/navigation/sidebar";
 
-const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
+const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
 const googleSans = Google_Sans({
   variable: "--font-google-sans",
@@ -21,9 +24,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", figtree.variable)}>
-      <body className={`${googleSans.variable} antialiased`}>{children}</body>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("font-sans", googleSans.variable, figtree.variable)}>
+      <head />
+      <body className="antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange>
+          <SidebarProvider>
+            <AppSidebar />
+            <main className="flex flex-col items-center justify-center w-[calc(100%-30rem)]">
+              {children}
+            </main>
+          </SidebarProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
---preset a1QHY0
