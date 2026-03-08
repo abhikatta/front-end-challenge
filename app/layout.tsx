@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/navigation/app-sidebar";
+import AppTopbar from "@/components/navigation/app-tobar";
+import { Toaster } from "sonner";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -27,7 +29,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("font-sans", googleSans.variable, figtree.variable)}>
+      className={cn(googleSans.variable, figtree.variable)}>
       <head />
       <body className="antialiased">
         <ThemeProvider
@@ -37,8 +39,10 @@ export default function RootLayout({
           disableTransitionOnChange>
           <SidebarProvider>
             <AppSidebar />
-            <main className="flex flex-col items-center justify-center w-[calc(100%-30rem)]">
+            <main className="w-full h-full">
+              <AppTopbar />
               {children}
+              <Toaster />
             </main>
           </SidebarProvider>
         </ThemeProvider>

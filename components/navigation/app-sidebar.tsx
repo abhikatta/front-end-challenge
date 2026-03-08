@@ -4,19 +4,19 @@ import { sidebar } from "@/constants/sidebar";
 import { getUserRole } from "@/lib/auth";
 import { Person } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { redirect } from "next/navigation";
 import SidebarSection from "./sidebar-group";
 
 const AppSidebar = async () => {
   const role = await getUserRole();
-  if (!role) redirect("/login");
+
+  if (!role) return <></>;
 
   const sidebarData = sidebar.filter((item) =>
     ROLE_PERMISSIONS[role].includes(item.permission),
   );
 
   return (
-    <Sidebar collapsible="offcanvas" variant="inset">
+    <Sidebar variant="inset">
       <SidebarHeader>
         <div className="flex items-center  gap-3">
           <div className="rounded-full border border-border p-2">

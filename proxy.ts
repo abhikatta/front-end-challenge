@@ -1,28 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ROLES } from "./constants/roles";
 
-export const proxy = (request: NextRequest) => {
-  const user = request.cookies.get("user")?.value;
-  const role = user ? JSON.parse(user).role : null;
+export function proxy(request: NextRequest) {
+  const userCookie = request.cookies.get("user")?.value;
+  const user = userCookie ? JSON.parse(userCookie) : null;
+
   const { pathname } = request.nextUrl;
 
-  console.log(user, role);
+  const isAuthPage =
+    pathname.startsWith("/login") || pathname.startsWith("/signup");
+
+  if (!user && isAuthPage) {
+    return NextResponse.next();
+  }
 
   if (!user) {
-    return NextResponse.redirect(new URL("/login", request.nextUrl));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
-  if (
-    user &&
-    (pathname.startsWith("/login") || pathname.startsWith("signup"))
-  ) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
+
+  if (user && isAuthPage) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
-  if (role === ROLES.STORE_KEEPER && pathname.startsWith("/dashboard")) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
+
+  if (user.role === ROLES.STORE_KEEPER && pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
+
   return NextResponse.next();
-};
+}
 
 export const config = {
-  matcher: ["/((?!api|_next|favicon.ico|login|signup).*)"],
+  matcher: ["/((?!api|_next|favicon.ico).*)"],
 };

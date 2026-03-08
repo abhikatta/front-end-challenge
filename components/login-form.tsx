@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export const LoginForm = () => {
   const router = useRouter();
@@ -16,24 +17,30 @@ export const LoginForm = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+      const data = await res.json();
 
-    const data = await res.json();
+      setLoading(false);
 
-    setLoading(false);
-
-    if (!res.ok) {
-      setError(data.message);
-      return;
-    } else {
-      router.replace("/");
+      if (!res.ok) {
+        setError(data.message);
+        return;
+      } else {
+        router.replace("/");
+      }
+    } catch (error) {
+      toast.error("Something went wrong! Please try again.");
+      console.error(error);
+    } finally {
+      router.refresh();
     }
   };
 
