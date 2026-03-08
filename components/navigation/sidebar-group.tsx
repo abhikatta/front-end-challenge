@@ -16,13 +16,13 @@ import {
 } from "@/components/ui/sidebar";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "../ui/button";
-import { SidebarItem } from "./sidebar";
+import { SidebarItem } from "./app-sidebar";
 import { ChevronDown } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 const SidebarChildItem = ({ menuItem }: { menuItem: SidebarItem }) => {
   return menuItem.url ? (
-    <Button variant={"secondary"} key={menuItem.id}>
+    <Button variant={"secondary"} key={menuItem.title}>
       <Link
         href={menuItem.url}
         className="flex gap-3 items-center justify-start w-full">
@@ -35,7 +35,7 @@ const SidebarChildItem = ({ menuItem }: { menuItem: SidebarItem }) => {
     </Button>
   ) : (
     <Button
-      key={menuItem.id}
+      key={menuItem.title}
       variant={"secondary"}
       className="flex gap-3 items-center justify-start">
       {menuItem.icon && <HugeiconsIcon icon={menuItem.icon} />}
@@ -53,10 +53,10 @@ const SidebarSection = ({ items }: { items: SidebarItem[] }) => {
       <SidebarMenu>
         {items.map((menuItem) =>
           !menuItem.children ? (
-            <SidebarChildItem key={menuItem.id} menuItem={menuItem} />
+            <SidebarChildItem key={menuItem.title} menuItem={menuItem} />
           ) : (
             <Collapsible
-              key={menuItem.id}
+              key={menuItem.title}
               asChild
               defaultOpen={menuItem.isActive}
               className="group/collapsible">
@@ -79,7 +79,7 @@ const SidebarSection = ({ items }: { items: SidebarItem[] }) => {
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     {menuItem.children?.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.id}>
+                      <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
                           <Link href={subItem.url} className="w-full">
                             {subItem.title}

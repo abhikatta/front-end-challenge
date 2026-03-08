@@ -2,6 +2,7 @@ import { Sidebar, SidebarHeader } from "@/components/ui/sidebar";
 import {
   BarChart,
   CreditCard,
+  DashboardCircleIcon,
   Gear,
   Home,
   Person,
@@ -9,13 +10,14 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, HugeiconsIconProps } from "@hugeicons/react";
 import SidebarSection from "./sidebar-group";
+import { getUserRole } from "@/lib/auth";
+import { ROLES } from "@/constants/roles";
 
 interface SidebarItemChild extends Omit<SidebarItem, "isActive" | "children"> {
   url: string;
 }
 
 export interface SidebarItem {
-  id: number | string;
   title: string;
   url?: string;
   icon: HugeiconsIconProps["icon"] | null;
@@ -25,7 +27,6 @@ export interface SidebarItem {
 
 const sidebar: SidebarItem[] = [
   {
-    id: 1,
     title: "Home",
     icon: Home,
     isActive: false,
@@ -33,19 +34,23 @@ const sidebar: SidebarItem[] = [
     url: "/",
   },
   {
-    id: 2,
+    title: "Dashboard",
+    icon: DashboardCircleIcon,
+    isActive: false,
+    children: null,
+    url: "/dashboard",
+  },
+  {
     title: "Store",
     isActive: true,
     icon: Store,
     children: [
       {
-        id: 21,
         title: "Products",
         url: "/store/products",
         icon: null,
       },
       {
-        id: 22,
         title: "Add Product",
         icon: null,
         url: "/store/add-product",
@@ -53,19 +58,16 @@ const sidebar: SidebarItem[] = [
     ],
   },
   {
-    id: 3,
     title: "Analytic",
     icon: BarChart,
     isActive: true,
     children: [
       {
-        id: 31,
         title: "Traffic",
         url: "/analytics/traffic",
         icon: null,
       },
       {
-        id: 32,
         title: "Earning",
         url: "/analytics/earning",
         icon: null,
@@ -73,19 +75,16 @@ const sidebar: SidebarItem[] = [
     ],
   },
   {
-    id: 4,
     isActive: true,
     title: "Finances",
     icon: CreditCard,
     children: [
       {
-        id: 41,
         title: "Payment",
         url: "/finances/payment",
         icon: null,
       },
       {
-        id: 42,
         title: "Payout",
         url: "/finances/payout",
         icon: null,
@@ -93,19 +92,16 @@ const sidebar: SidebarItem[] = [
     ],
   },
   {
-    id: 5,
     title: "Account Setting",
     isActive: true,
     icon: Gear,
     children: [
       {
-        id: 51,
         title: "My Profile",
         url: "/account-setting/my-profile",
         icon: null,
       },
       {
-        id: 52,
         title: "Security",
         url: "/account-setting/security",
         icon: null,
@@ -113,7 +109,6 @@ const sidebar: SidebarItem[] = [
     ],
   },
   {
-    id: 6,
     isActive: false,
     title: "Help and Support",
     icon: Gear,
@@ -122,7 +117,13 @@ const sidebar: SidebarItem[] = [
   },
 ];
 
-const AppSidebar = () => {
+const AppSidebar = async () => {
+  const isStoreManager = await getUserRole();
+  const sidebarData =
+    isStoreManager === ROLES.STORE_KEEPER
+      ? sidebar.filter((item) => item.title !== "Dashboard")
+      : sidebar;
+
   return (
     <Sidebar collapsible="offcanvas" variant="inset">
       <SidebarHeader>
@@ -132,7 +133,7 @@ const AppSidebar = () => {
           </div>
           <p className="text-lg font-semibold">Bitstore</p>
         </div>
-        <SidebarSection items={sidebar} />
+        <SidebarSection items={sidebarData} />
       </SidebarHeader>
     </Sidebar>
   );

@@ -4,7 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/navigation/sidebar";
+import AppSidebar from "@/components/navigation/app-sidebar";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
