@@ -1,48 +1,22 @@
 "use client";
 
 import { useTheme } from "next-themes";
-
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Moon, Sun } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
 
-export function ModeToggle() {
-  const { setTheme } = useTheme();
+export function ThemeToggle() {
+  const { setTheme, resolvedTheme } = useTheme();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <HugeiconsIcon
-            icon={Sun}
-            strokeWidth={2}
-            className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
-          />
-          <HugeiconsIcon
-            icon={Moon}
-            strokeWidth={2}
-            className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
-          />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <DropdownMenuItem
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+      {resolvedTheme === "dark" ? (
+        <HugeiconsIcon icon={Sun} strokeWidth={2} />
+      ) : (
+        <HugeiconsIcon icon={Moon} strokeWidth={2} />
+      )}
+      <span className=" capitalize">{resolvedTheme}</span> theme
+    </DropdownMenuItem>
   );
 }

@@ -3,6 +3,11 @@ export enum ROLES {
   STORE_KEEPER = "store_keeper",
 }
 
+export const ROLE_LABELS = {
+  [ROLES.MANAGER]: "Manager",
+  [ROLES.STORE_KEEPER]: "Store Keeper",
+} as const;
+
 export enum PERMISSIONS {
   HOME = "/",
   DASHBOARD = "dashboard",

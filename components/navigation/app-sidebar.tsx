@@ -18,7 +18,7 @@ const AppSidebar = async () => {
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
-        <div className="flex items-center  gap-3">
+        <div className="flex items-center gap-3">
           <div className="rounded-full border border-border p-2">
             <HugeiconsIcon icon={Person} />
           </div>

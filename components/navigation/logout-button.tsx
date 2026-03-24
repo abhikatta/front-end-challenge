@@ -16,8 +16,6 @@ const LogoutButton = () => {
     } catch (e) {
       toast.error("Something went wrong! Please try again.");
       console.error(e);
-    } finally {
-      router.refresh();
     }
   };
 

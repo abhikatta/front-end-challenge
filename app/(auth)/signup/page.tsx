@@ -2,15 +2,15 @@ import { LoginForm } from "@/app/(auth)/login/login-form";
 import { getUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-const Login = async () => {
+const Signup = async () => {
   const user = await getUser();
   if (user) return redirect("/");
 
   return (
-    <div className="flex min-h-screen items-center justify-center w-full p-0 m-0">
+    <div className="flex min-h-screen items-center justify-center w-full">
       <LoginForm />
     </div>
   );
 };
 
-export default Login;
+export default Signup;

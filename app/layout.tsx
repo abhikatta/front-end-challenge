@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
-import { Google_Sans, Figtree } from "next/font/google";
-import "./globals.css";
-import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/navigation/app-sidebar";
-import AppTopbar from "@/components/navigation/app-tobar";
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import { Figtree, Google_Sans } from "next/font/google";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -31,20 +28,16 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(googleSans.variable, figtree.variable)}>
       <head />
-      <body className="antialiased">
+      <body className="antialiased p-0 m-0">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="w-full h-full">
-              <AppTopbar />
-              {children}
-              <Toaster />
-            </main>
-          </SidebarProvider>
+          <main className="w-full h-full p-0 m-0">
+            {children}
+            <Toaster />
+          </main>
         </ThemeProvider>
       </body>
     </html>
